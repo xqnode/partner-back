@@ -1,9 +1,11 @@
 package com.partner.boot.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import cn.hutool.core.annotation.Alias;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,4 +45,23 @@ private static final long serialVersionUID = 1L;
     @ApiModelProperty("昵称")
     @Alias("昵称")
     private String name;
+    @ApiModelProperty("唯一标识")
+    @Alias("唯一标识")
+    private String uid;
+    @ApiModelProperty("逻辑删除")
+    // 逻辑删除字段
+    @TableLogic(value = "0", delval = "id")
+    private Integer deleted;
+    @ApiModelProperty("创建时间")
+    @Alias("创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+    @ApiModelProperty("更新时间")
+    @Alias("更新时间")
+    /**
+     * 插入与更新都写此字段。
+     * 若使用FieldFill.UPDATE，则只更新时写此字段。
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 }

@@ -1,5 +1,7 @@
 package com.partner.boot.service.impl;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.partner.boot.entity.User;
@@ -25,7 +27,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         try {
             dbUser = getOne(new UpdateWrapper<User>().eq("username", user.getUsername()));
         } catch (Exception e) {
-            throw new RuntimeException("系统异常");
+            throw new RuntimeException("数据库异常");
         }
         if (dbUser == null) {
             throw new ServiceException("未找到用户");
@@ -34,5 +36,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new ServiceException("用户名或密码错误");
         }
         return dbUser;
+    }
+
+    @Override
+    public User register(User user) {
+        try {
+            // 存储用户信息
+            return saveUser(user);
+        } catch (Exception e) {
+            throw new RuntimeException("数据库异常");
+        }
+    }
+
+
+    private User saveUser(User user) {
+        User dbUser = getOne(new UpdateWrapper<User>().eq("username", user.getUsername()));
+        if (dbUser != null) {
+            throw new ServiceException("用户已注册");
+        }
+        // 设置昵称
+        if (StrUtil.isBlank(user.getName())) {
+//                String name = Constants.USER_NAME_PREFIX + DateUtil.format(new Date(), Constants.DATE_RULE_YYYYMMDD)
+//                        + RandomUtil.randomString(4);
+            user.setName("李白");
+        }
+        if (StrUtil.isBlank(user.getPassword())) {
+            user.setPassword("123");   // 设置默认密码
+        }
+        // 设置唯一标识
+        user.setUid(IdUtil.fastSimpleUUID());
+        boolean saveSuccess = save(user);
+        if (!saveSuccess) {
+            throw new RuntimeException("注册失败");
+        }
+        return user;
     }
 }

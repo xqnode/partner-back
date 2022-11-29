@@ -72,12 +72,12 @@ private static final long serialVersionUID = 1L;
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
         <#if field.convert>
-        @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
         <#else>
-        @TableField(fill = FieldFill.${field.fill})
+    @TableField(fill = FieldFill.${field.fill})
         </#if>
     <#elseif field.convert>
-        @TableField("${field.annotationColumnName}")
+    @TableField("${field.annotationColumnName}")
     </#if>
 <#-- 乐观锁注解 -->
     <#if field.versionField>

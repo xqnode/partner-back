@@ -39,4 +39,11 @@ public class WebController {
         return Result.success(res);
     }
 
+    @ApiOperation(value = "用户注册接口")
+    @PostMapping("/register")
+    public Result register(@RequestBody User user) {
+        User res = userService.register(user);
+        return Result.success(res);
+    }
+
 }
