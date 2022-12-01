@@ -57,6 +57,7 @@ public class CodeGenerator {
                             .serviceBuilder().fileOverride()
                             .mapperBuilder().fileOverride()
                             .entityBuilder().fileOverride().enableLombok()
+                            .logicDeleteColumnName("deleted")
                             .addTableFills(new Column("create_time", FieldFill.INSERT))
                             .addTableFills(new Column("update_time", FieldFill.INSERT_UPDATE));
                     builder.addInclude(tableName) // 设置需要生成的表名

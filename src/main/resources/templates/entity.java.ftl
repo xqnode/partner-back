@@ -85,7 +85,7 @@ private static final long serialVersionUID = 1L;
     </#if>
 <#-- 逻辑删除注解 -->
     <#if field.logicDeleteField>
-        @TableLogic
+    @TableLogic(value = "0", delval = "id")
     </#if>
     private ${field.propertyType} ${field.propertyName};
 </#list>
