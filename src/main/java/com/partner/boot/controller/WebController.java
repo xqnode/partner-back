@@ -1,14 +1,12 @@
 package com.partner.boot.controller;
 
 import com.partner.boot.common.Result;
+import com.partner.boot.controller.domain.UserRequest;
 import com.partner.boot.entity.User;
 import com.partner.boot.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -34,16 +32,30 @@ public class WebController {
 
     @ApiOperation(value = "用户登录接口")
     @PostMapping("/login")
-    public Result login(@RequestBody User user) {
+    public Result login(@RequestBody UserRequest user) {
         User res = userService.login(user);
         return Result.success(res);
     }
 
     @ApiOperation(value = "用户注册接口")
     @PostMapping("/register")
-    public Result register(@RequestBody User user) {
+    public Result register(@RequestBody UserRequest user) {
         User res = userService.register(user);
         return Result.success(res);
+    }
+
+    @ApiOperation(value = "邮箱验证接口")
+    @GetMapping("/email")
+    public Result sendEmail(@RequestParam String email, @RequestParam String type) {  //  ?email=xxx&type=xxx
+        userService.sendEmail(email, type);
+        return Result.success();
+    }
+
+    @ApiOperation(value = "密码重置接口")
+    @PostMapping("/password/reset")
+    public Result passwordReset(@RequestBody UserRequest userRequest) {
+        String newPass = userService.passwordReset(userRequest);
+        return Result.success(newPass);
     }
 
 }
