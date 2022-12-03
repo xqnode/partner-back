@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import cn.hutool.core.annotation.Alias;
 import io.swagger.annotations.ApiModel;
@@ -61,10 +60,8 @@ private static final long serialVersionUID = 1L;
     private LocalDateTime createTime;
     @ApiModelProperty("更新时间")
     @Alias("更新时间")
-    /**
-     * 插入与更新都写此字段。
-     * 若使用FieldFill.UPDATE，则只更新时写此字段。
-     */
+    // 若使用FieldFill.UPDATE，则只更新时写此字段。
+    // INSERT_UPDATE 表示同时插入和更新此字段
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 }

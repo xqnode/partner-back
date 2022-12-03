@@ -6,12 +6,14 @@ import com.partner.boot.entity.User;
 import com.partner.boot.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 @Api(tags = "无权限接口列表")
 @RestController
+@Slf4j
 public class WebController {
 
     @Resource
@@ -27,13 +29,17 @@ public class WebController {
         if (title != null && version != null) {
             ver = String.join("-", title, version);
         }
+        userService.getById(1);
+        log.info("启动项目数据库连接查询成功");
         return ver;
     }
 
     @ApiOperation(value = "用户登录接口")
     @PostMapping("/login")
     public Result login(@RequestBody UserRequest user) {
+        long startTime = System.currentTimeMillis();
         User res = userService.login(user);
+        log.info("登录花费时间 {}ms", System.currentTimeMillis() - startTime);
         return Result.success(res);
     }
 
