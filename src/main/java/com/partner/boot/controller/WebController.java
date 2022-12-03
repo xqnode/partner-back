@@ -3,6 +3,7 @@ package com.partner.boot.controller;
 import com.partner.boot.common.Result;
 import com.partner.boot.controller.domain.UserRequest;
 import com.partner.boot.entity.User;
+import com.partner.boot.mapper.UserMapper;
 import com.partner.boot.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +30,6 @@ public class WebController {
         if (title != null && version != null) {
             ver = String.join("-", title, version);
         }
-        userService.getById(1);
-        log.info("启动项目数据库连接查询成功");
         return ver;
     }
 

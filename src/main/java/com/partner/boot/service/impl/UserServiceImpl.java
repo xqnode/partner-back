@@ -61,7 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public User register(UserRequest user) {
         // 校验邮箱
-        validateEmail(user.getEmailCode());
+        validateEmail(user.getEmail(), user.getEmailCode());
         try {
             User saveUser = new User();
             BeanUtils.copyProperties(user, saveUser);   // 把请求数据的属性copy给存储数据库的属性
@@ -91,9 +91,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         ThreadUtil.execAsync(() -> {   // 多线程执行异步请求，可以防止网络阻塞
             emailUtils.sendHtml("【Partner交友网】验证提醒", html, email);
         });
-        CODE_MAP.put(code, System.currentTimeMillis());
+        CODE_MAP.put(email + code, System.currentTimeMillis());
     }
 
+    /**
+     * 重置密码
+     * @param userRequest
+     * @return
+     */
     @Override
     public String passwordReset(UserRequest userRequest) {
         String email = userRequest.getEmail();
@@ -102,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new ServiceException("未找到用户");
         }
         // 校验邮箱验证码
-        validateEmail(userRequest.getEmailCode());
+        validateEmail(userRequest.getEmail(), userRequest.getEmailCode());
         String newPass = "123";
         dbUser.setPassword(newPass);
         try {
@@ -118,16 +123,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      *
      * @param emailCode
      */
-    private void validateEmail(String emailCode) {
+    private void validateEmail(String email, String emailCode) {
+        String key = email + emailCode;
         // 校验邮箱
-        Long timestamp = CODE_MAP.get(emailCode);
+        Long timestamp = CODE_MAP.get(key);
         if (timestamp == null) {
             throw new ServiceException("请先验证邮箱");
         }
         if (timestamp + TIME_IN_MS5 < System.currentTimeMillis()) {  // 说明验证码过期
             throw new ServiceException("验证码过期");
         }
-        CODE_MAP.remove(emailCode);  // 清除缓存
+        CODE_MAP.remove(key);  // 清除缓存
     }
 
 
