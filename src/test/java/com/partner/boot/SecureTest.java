@@ -1,6 +1,10 @@
 package com.partner.boot;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
+import cn.hutool.crypto.symmetric.DES;
 import org.junit.jupiter.api.Test;
 
 public class SecureTest {
@@ -20,4 +24,15 @@ public class SecureTest {
         System.out.println("AES解密后：" + text2);
 
     }
+
+    @Test
+    public void test1() throws Exception {
+        String password = "123456";
+        DES des = SecureUtil.des("asds()<>an>>//ks__ajbdn2#$jsanblaksdl".getBytes());
+        String encode = des.encryptHex(password);  // 5cccfdd3deb40538  2a5a251979ba2333
+        System.out.println(encode);
+        String decode = des.decryptStr(encode);
+        System.out.println(decode);
+    }
+
 }
