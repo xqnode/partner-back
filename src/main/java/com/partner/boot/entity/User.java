@@ -1,13 +1,19 @@
 package com.partner.boot.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
 import cn.hutool.core.annotation.Alias;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.partner.boot.common.LDTConfig;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +23,7 @@ import lombok.Setter;
 * </p>
 *
 * @author 程序员青戈
-* @since 2022-11-28
+* @since 2022-12-05
 */
 @Getter
 @Setter
@@ -44,24 +50,30 @@ private static final long serialVersionUID = 1L;
     @ApiModelProperty("昵称")
     @Alias("昵称")
     private String name;
+
+    // 邮箱
     @ApiModelProperty("邮箱")
     @Alias("邮箱")
     private String email;
-    @ApiModelProperty("唯一标识")
-    @Alias("唯一标识")
+
+    // 用户唯一id
+    @ApiModelProperty("用户唯一id")
+    @Alias("用户唯一id")
     private String uid;
-    @ApiModelProperty("逻辑删除")
-    // 逻辑删除字段
+
+    // 逻辑删除 0存在  id删除
+    @ApiModelProperty("逻辑删除 0存在  id删除")
+    @Alias("逻辑删除 0存在  id删除")
     @TableLogic(value = "0", delval = "id")
     private Integer deleted;
-    @ApiModelProperty("创建时间")
-    @Alias("创建时间")
+
     @TableField(fill = FieldFill.INSERT)
+    @JsonDeserialize(using = LDTConfig.CmzLdtDeSerializer.class)
+    @JsonSerialize(using = LDTConfig.CmzLdtSerializer.class)
     private LocalDateTime createTime;
-    @ApiModelProperty("更新时间")
-    @Alias("更新时间")
-    // 若使用FieldFill.UPDATE，则只更新时写此字段。
-    // INSERT_UPDATE 表示同时插入和更新此字段
+
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonDeserialize(using = LDTConfig.CmzLdtDeSerializer.class)
+    @JsonSerialize(using = LDTConfig.CmzLdtSerializer.class)
     private LocalDateTime updateTime;
 }

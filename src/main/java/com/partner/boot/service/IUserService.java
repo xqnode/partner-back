@@ -1,12 +1,13 @@
 package com.partner.boot.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.partner.boot.controller.domain.LoginDTO;
 import com.partner.boot.controller.domain.UserRequest;
 import com.partner.boot.entity.User;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author 程序员青戈
@@ -14,9 +15,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUserService extends IService<User> {
 
-    User login(UserRequest user);
+    LoginDTO login(UserRequest user);
 
-    User register(UserRequest user);
+    void register(UserRequest user);
 
     void sendEmail(String email, String type);
 

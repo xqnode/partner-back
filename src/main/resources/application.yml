@@ -54,4 +54,19 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-
+sa-token:
+  token-name: Authorization
+  # token有效期，单位s 默认2小时, -1代表永不过期
+  timeout: 7200
+  # 是否允许同一账号并发登录
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token
+  is-share: true
+  # token风格
+#  token-style: simple-uuid
+  # 是否输出操作日
+  is-log: false
+  # token前缀  注意必须是 Bearer {token}, Bearer后面加空格
+  token-prefix: Bearer
+  # jwt秘钥
+  jwt-secret-key: dsakdhbkasndsanbdksalsakdljkadlasldsadlsajd20981u301))_-w2--2

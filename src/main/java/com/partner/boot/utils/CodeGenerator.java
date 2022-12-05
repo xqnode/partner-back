@@ -18,7 +18,7 @@ import java.util.Properties;
  */
 public class CodeGenerator {
 
-    private static final String TABLE = "dynamic";
+    private static final String TABLE = "sys_user";
     private static final String PACKAGE_NAME = "com.partner.boot";
     private static final String AUTHOR = "程序员青戈";
 

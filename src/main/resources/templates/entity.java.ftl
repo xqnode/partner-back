@@ -6,6 +6,9 @@ import ${pkg};
 import cn.hutool.core.annotation.Alias;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.partner.boot.common.LDTConfig;
 <#if entityLombokModel>
 import lombok.Getter;
 import lombok.Setter;
@@ -75,6 +78,8 @@ private static final long serialVersionUID = 1L;
     @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
         <#else>
     @TableField(fill = FieldFill.${field.fill})
+    @JsonDeserialize(using = LDTConfig.CmzLdtDeSerializer.class)
+    @JsonSerialize(using = LDTConfig.CmzLdtSerializer.class)
         </#if>
     <#elseif field.convert>
     @TableField("${field.annotationColumnName}")
