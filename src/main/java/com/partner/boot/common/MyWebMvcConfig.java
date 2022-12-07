@@ -19,7 +19,7 @@ public class MyWebMvcConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/login", "/register", "/email", "/password/reset")
-                .excludePathPatterns("/swagger**/**", "/webjars/**", "/v3/**", "/doc.html", "");  // 排除 swagger拦截
+                .excludePathPatterns("/swagger**/**", "/webjars/**", "/v3/**", "/doc.html", "/favicon.ico");  // 排除 swagger拦截
     }
 
     @Override
