@@ -1,5 +1,6 @@
 package com.partner.boot.service.impl;
 
+import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.thread.ThreadUtil;
@@ -55,8 +56,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (dbUser == null) {
             throw new ServiceException("未找到用户");
         }
-        String securePass = SaSecureUtil.aesEncrypt(Constants.LOGIN_USER_KEY, user.getPassword());
-        if (!securePass.equals(dbUser.getPassword())) {
+//        String securePass = SaSecureUtil.aesEncrypt(Constants.LOGIN_USER_KEY, user.getPassword());
+//        if (!securePass.equals(dbUser.getPassword())) {
+//            throw new ServiceException("用户名或密码错误");
+//        }
+        if (!BCrypt.checkpw(user.getPassword(), dbUser.getPassword())) {
             throw new ServiceException("用户名或密码错误");
         }
         // 登录
@@ -139,7 +143,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String key = Constants.EMAIL_CODE + EmailCodeEnum.RESET_PASSWORD.getValue() + email;
         validateEmail(key, userRequest.getEmailCode());
         String newPass = "123";
-        dbUser.setPassword(newPass);
+        dbUser.setPassword(BCrypt.hashpw(newPass));
         try {
             updateById(dbUser);   // 设置到数据库
         } catch (Exception e) {
@@ -181,7 +185,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             user.setPassword("123");   // 设置默认密码
         }
         // 加密用户密码
-        user.setPassword(SaSecureUtil.aesEncrypt(Constants.LOGIN_USER_KEY, user.getPassword()));
+        user.setPassword(BCrypt.hashpw(user.getPassword()));  // BCrypt加密
         // 设置唯一标识
         user.setUid(IdUtil.fastSimpleUUID());
         try {

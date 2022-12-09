@@ -1,11 +1,16 @@
 package com.partner.boot.common;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,7 +27,7 @@ public class MyFilter implements Filter {
 
     private static final long windowTime = 1000L;
 
-    private static final int door = 2;
+    private static final int door = 100;
 
     private static final AtomicInteger bear = new AtomicInteger(0);
 
@@ -46,6 +51,11 @@ public class MyFilter implements Filter {
             if (count > door) {  // 超过了阈值
                 // 就要进行限制  限流操作
                 log.info("关门放狗成功， 拦截了请求, count: {}", count);
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                response.setStatus(HttpStatus.OK.value());
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+                response.getWriter().print(JSONUtil.toJsonStr(Result.error("402", "接口请求太频繁")));
                 return;   // 关门放狗
             }
         } else {
